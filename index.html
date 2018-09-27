@@ -1,0 +1,118 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="jquery.js"></script>
+    <script src="data_generator.js"></script>
+    <script src="jquery.timeago.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css" >
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Slabo+13px|Slabo+27px" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=News+Cycle" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Leckerli+One" rel="stylesheet">
+  </head>
+
+
+  <body>
+
+    <div class="container">
+      <h1 class= mauTwittler><img src="mauricio.png" alt="cute bird" style="vertical-align:bottom;width:80px;height:80px;">    Mau Twittler    <img src="mauricio2.png" alt="cute bird2" style="vertical-align:bottom;width:80px;height:80px;"></h1>
+
+      <div id=visitor>
+          <h2 id=visitorWrite>Write a tweet</h2>
+      </div>      
+      
+      <!-- Form for new tweets -->
+      <div>
+        <form>
+          <div class="form-group">
+              <label for="visitorInput"><label><p></br></p>User Name</label>
+              <input type="text" class="form-control" id="visitorInput" placeholder="visitor">
+          </div>
+          <div class="form-group">
+              <label for="visitorMessage">Enter your tweet:</label>
+              <input type="text" class="form-control" id="visitorMessage" placeholder="Tweet, tweet, tweet">
+          </div>
+          <div class="form-group">
+              <button type="submit" class="btn">Tweet It!</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- // Tweets  -->
+      <div> 
+        <ul class="tweets ">
+          <li class="list-group-item" id="titleTwt"><h2>Tweets</h2></li>
+
+        </ul>
+       </div>
+      
+      <div class="alerts">
+         <button id="more" class="btn"> More Tweets, Pleaze! </button>
+      </div>
+
+
+    <!-- Main code here -->
+
+    <script>
+
+    $(document).ready(function(){
+
+    var retrieve = function (){
+      $('li.tClass').remove();
+      for(var i = 0; i < streams.home.length; i++){
+        var tweet = streams.home[i];
+        var userName = '@' + tweet.user;
+        $('ul.tweets').append('<li class="tClass list-group-item">' 
+          + '<p id="tweeteroo">' + '<div class="filtro">' + userName + '</p>' + '</div>' + '  ' 
+          + '<p class=timeC>' + $.timeago(tweet.created_at) + '</p>' 
+          + '<p class=text>' + tweet.message +  '</p>' + '</li>');
+      }
+    };
+
+    var userPop = function (input){
+      $('li.tClass').remove();
+      for(var i = 0; i < streams.home.length; i++){
+        var tweet = streams.home[i];
+        var userName = '@' + tweet.user;
+        if(input === userName){
+        $('ul.tweets').append('<li class="tClass list-group-item">'  
+          + '<p id="tweeteroo">' + '<div class="filtro">' + userName + '</p>' + '</div>' + '  ' 
+          + '<p class=timeC>' + $.timeago(tweet.created_at) + '</p>' 
+          + '<p class=text>' + tweet.message + '</p>' + '</li>');
+        }
+      }
+    };
+
+    //get new tweets 
+    var refresh = true;
+    retrieve();
+    setInterval(function(){
+      if(refreshSwitch === true){
+        retrieve();
+      } }, 3000);
+
+    // Get tweets from cliced users
+    $(document).on('click','.filtro', function(){
+      refresh = false;
+      userPop($(this).text());
+    });
+
+    //Update tweets
+    $('#more').on('click', function(){
+      refresh = true;
+      retrieve();
+    });
+
+
+      });
+
+    </script>
+
+    </div>
+
+  </body>
+</html>
+
+
+
